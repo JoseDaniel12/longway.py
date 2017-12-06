@@ -1,0 +1,53 @@
+archivo_tringulo=open("triangle.txt")
+lista_listas=[]
+
+for fila in archivo_tringulo:
+	lista,numero=[],""
+	for celda in fila:
+		if celda!="\n" and celda!=" ":
+			numero+=celda
+		elif celda==" " or celda=="\n":
+			lista.append(int(numero))
+			numero=""
+	lista_listas.append(lista)
+
+lista_listas2=[[lista_listas[0]]]
+copia=lista_listas[:]
+lista_listas.pop(0)
+
+for y in range(len(lista_listas)):
+	tira=[]
+	for x in range(len(lista_listas[y])):
+		cpa=[]#coordenadas_posibles_anteceosres
+		elemento=[]
+		y_presente,x_presente = y+1,len(tira)
+		y_antcesor,x_antecesor1,x_antecesor2 = y,len(tira),len(tira)-1
+		cpa.extend([[y_antcesor,x_antecesor1],[y_antcesor,x_antecesor2]])
+
+		for coordenada in cpa:
+			for integrante in coordenada:
+
+				if integrante<0:
+					cpa.remove(coordenada)
+
+				if len(cpa)==2:
+					if integrante==cpa[0][1] or integrante==cpa[1][1]:
+						if len(copia[y_antcesor])<=integrante:
+							cpa.remove(coordenada)
+
+		if len(cpa)==2:
+			if lista_listas2[y][x_antecesor1][0]> lista_listas2[y][x_antecesor2][0]:
+				cpa.pop(1)
+			else: cpa.pop(0)
+
+		acumulado=lista_listas2[y][cpa[0][1]][0]+copia[y_presente][x_presente]
+		elemento=[acumulado ,cpa[0][0], cpa[0][1]] 
+		tira.append(elemento)
+	lista_listas2.append(tira)
+
+totales=[]
+for linea in lista_listas2:
+	for informacion in linea:
+		totales.append(informacion[0])
+
+print("Total:",max(totales))
